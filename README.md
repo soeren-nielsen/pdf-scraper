@@ -1,4 +1,3 @@
 # pdf-scraper
-
-pip install tabula-py
-pip install pandas
+# pip install tabula-py
+# pip install pandas
