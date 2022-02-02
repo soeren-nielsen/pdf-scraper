@@ -1,11 +1,26 @@
-import tabula
+from numpy import require
+import requests
+import pdfplumber
+import pandas as pd
+from collections import namedtuple
 
-file = "/Users/soeren_stoevring_nielsen/Google Drive/Personligt/GitHub/pdf-scraper/document.pdf"
+faktura = namedtuple('faktura', 'periode, varenummer, varegruppe, antal_kg, afdeling')
 
-table1 = tabula.read_pdf(file, pages=1, multiple_tables=True)
-table2 = tabula.read_pdf(file, pages=2, multiple_tables=True)
+def download_file(url):
+    local_filename = url.splut('/')[-1]
 
-table1[0]
-table2[0]
+    with requests.get(url) as r:
+        with open(local_filename, 'wb') as f:
+            f.write(r.content)
+        
+    return local_filename
 
-print(table1[0])
+ap_url = 'https://drive.google.com/file/d/1ME2UbVSgn6A5KWiSwvoraBwRVVFFLvBh/view?usp=sharing'
+
+ap = download_file(ap_url)
+
+with pdfplumber.open(ap) as pdf:
+    page = pdf.pages(0)
+    text = page.extract_text()
+
+print(text)
